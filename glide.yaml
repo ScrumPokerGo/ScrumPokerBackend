@@ -1,0 +1,4 @@
+package: github.com/jata84/ScrumPoker
+import:
+- package: github.com/spf13/viper
+- package: github.com/Sirupsen/logrus
