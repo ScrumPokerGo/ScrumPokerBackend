@@ -22,7 +22,7 @@ func NewUser(name string) User {
 	return user
 }
 
-func (u User) Save() {
+func (u *User) Save() {
 	if (u.ID==0){
 		database.DB.Create(&u)
 	}else{

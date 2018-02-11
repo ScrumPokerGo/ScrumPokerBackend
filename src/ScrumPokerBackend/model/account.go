@@ -33,7 +33,7 @@ func GetAccountAll() []Account{
 	return account_list
 }
 
-func (a Account) Save() {
+func (a *Account) Save() {
 	if (a.ID==0){
 		database.DB.Create(&a)
 	}else{
@@ -41,6 +41,6 @@ func (a Account) Save() {
 	}
 }
 
-func (a Account) Delete() {
+func (a *Account) Delete() {
 	database.DB.Delete(&a)
 }
