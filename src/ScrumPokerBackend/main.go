@@ -4,7 +4,6 @@ import (
 	"net/http"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/gorilla/mux"
-	"github.com/gorilla/handlers"
 	"ScrumPokerBackend/database"
 	"ScrumPokerBackend/routers"
 	"log"
@@ -13,6 +12,7 @@ import (
 func handler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Gorilla!\n"))
 }
+
 
 func main() {
 
@@ -33,8 +33,9 @@ func main() {
 
 
 
+
 	// Satisfies the http.Handler interface
 
 
-	log.Fatal(http.ListenAndServe(":8000", handlers.RecoveryHandler()(router)))
+	log.Fatal(http.ListenAndServe(":8000", router))
 }
