@@ -30,6 +30,7 @@ func main() {
 
 	router := mux.NewRouter()
 	routers.AddAccountRouters(router)
+	routers.AddUserRouters(router)
 
 
 

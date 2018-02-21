@@ -14,32 +14,50 @@ type Account struct {
 	Deleted   bool      `json:"deleted"`
 }
 
-func NewAccount(name string) Account {
+func NewAccount(name string) *Account {
 	ac := Account{}
 	ac.ID = 0
 	ac.Name = name
-	return ac
+	return &ac
 }
 
-func GetAccount(id uint) Account{
+func GetAccount(id uint) (*Account,error){
 	a := Account{}
-	database.DB.First(&a, id)
-	return a
-}
-
-func GetAccountAll() []Account{
-	account_list := []Account{}
-	database.DB.Find(&account_list)
-	return account_list
-}
-
-func (a *Account) Save() {
-	if (a.ID==0){
-		database.DB.Create(&a)
-	}else{
-		database.DB.Save(&a)
+	db := database.DB.First(&a, id)
+	if (db.Error != nil){
+		return nil,db.Error
 	}
+	return &a,nil
 }
+
+func GetAccountAll() ([]Account,error){
+	account_list := []Account{}
+	db := database.DB.Find(&account_list)
+	if (db.Error!=nil){
+		return nil,db.Error
+	}
+
+	return account_list,nil
+}
+
+func (a *Account) Save() error {
+	db := database.DB.Save(&a)
+	if (db.Error!=nil){
+		return db.Error
+	}
+	return nil
+
+}
+
+func (a *Account) Create() error{
+	db := database.DB.Create(&a)
+	if (db.Error != nil){
+		return db.Error
+	}
+	return nil
+}
+
+
 
 func (a *Account) Delete() {
 	database.DB.Delete(&a)

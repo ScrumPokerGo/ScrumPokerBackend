@@ -3,6 +3,7 @@ package model
 import (
 	"time"
 	"ScrumPokerBackend/database"
+	"ScrumPokerBackend/error"
 )
 
 type User struct{
@@ -15,23 +16,43 @@ type User struct{
 }
 
 
-func NewUser(name string) User {
+func NewUser(name string) *User {
 	user := User{}
-	user.ID = 0
 	user.Name = name
-	return user
+	return &user
 }
 
-func (u *User) Save() {
-	if (u.ID==0){
-		database.DB.Create(&u)
-	}else{
-		database.DB.Save(&u)
+func (u *User) Save() error {
+	db := database.DB.Save(&u)
+	if (db.Error != nil){
+		return db.Error
 	}
+	return nil
 }
 
-func GetUser(id uint) User{
+func (u *User) Create() error{
+	db := database.DB.Create(&u)
+	if (db.Error != nil){
+		return db.Error
+	}
+	return nil
+}
+
+
+func GetUser(id uint) (*User,error){
 	u := User{}
-	database.DB.First(&u, id)
-	return u
+	db := database.DB.First(&u, id)
+	if (db.RowsAffected==0){
+		return nil,errors.New("User not found",404)
+	}
+	return &u,nil
+}
+
+func GetUserAll() ([]User, error){
+	user_list := []User{}
+	db := database.DB.Find(&user_list)
+	if (db.RowsAffected==0){
+		return nil,errors.New("Users not found",404)
+	}
+	return user_list,nil
 }
