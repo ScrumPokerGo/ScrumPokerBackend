@@ -14,7 +14,7 @@ func TestRegister(t *testing.T) {
 	current := len(handlers)
 	RegisterExitHandler(func() {})
 	if len(handlers) != current+1 {
-		t.Fatalf("expected %d handlers, got %d", current+1, len(handlers))
+		t.Fatalf("expected %d api, got %d", current+1, len(handlers))
 	}
 }
 

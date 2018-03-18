@@ -1,9 +1,9 @@
 package middleware
 
 import (
+	"encoding/base64"
 	"net/http"
 	"strings"
-	"encoding/base64"
 )
 
 func BasicAuth(h http.HandlerFunc) http.HandlerFunc {

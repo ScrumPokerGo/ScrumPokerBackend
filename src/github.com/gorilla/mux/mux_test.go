@@ -1988,7 +1988,7 @@ func methodHandler(method string) http.HandlerFunc {
 	}
 }
 
-// TestMethodsSubrouterCatchall matches handlers for subrouters where a
+// TestMethodsSubrouterCatchall matches api for subrouters where a
 // catchall handler is set for a mis-matching method.
 func TestMethodsSubrouterCatchall(t *testing.T) {
 	t.Parallel()
@@ -2035,7 +2035,7 @@ func TestMethodsSubrouterCatchall(t *testing.T) {
 	}
 }
 
-// TestMethodsSubrouterStrictSlash matches handlers on subrouters with
+// TestMethodsSubrouterStrictSlash matches api on subrouters with
 // strict-slash matchers.
 func TestMethodsSubrouterStrictSlash(t *testing.T) {
 	t.Parallel()
@@ -2091,7 +2091,7 @@ func TestMethodsSubrouterStrictSlash(t *testing.T) {
 	}
 }
 
-// TestMethodsSubrouterPathPrefix matches handlers on subrouters created
+// TestMethodsSubrouterPathPrefix matches api on subrouters created
 // on a router with a path prefix matcher and method matcher.
 func TestMethodsSubrouterPathPrefix(t *testing.T) {
 	t.Parallel()
@@ -2138,7 +2138,7 @@ func TestMethodsSubrouterPathPrefix(t *testing.T) {
 	}
 }
 
-// TestMethodsSubrouterSubrouter matches handlers on subrouters produced
+// TestMethodsSubrouterSubrouter matches api on subrouters produced
 // from method matchers registered on a root subrouter.
 func TestMethodsSubrouterSubrouter(t *testing.T) {
 	t.Parallel()
@@ -2194,7 +2194,7 @@ func TestMethodsSubrouterSubrouter(t *testing.T) {
 	}
 }
 
-// TestMethodsSubrouterPathVariable matches handlers on matching paths
+// TestMethodsSubrouterPathVariable matches api on matching paths
 // with path variables in them.
 func TestMethodsSubrouterPathVariable(t *testing.T) {
 	t.Parallel()

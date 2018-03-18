@@ -4,7 +4,7 @@ import "github.com/jinzhu/gorm"
 
 var DB *gorm.DB
 
-func Init(){
+func Init() {
 	var err error = nil
 	DB, err = gorm.Open("sqlite3", "scrumpoker.db")
 	DB.LogMode(true)
@@ -13,8 +13,7 @@ func Init(){
 	}
 }
 
-
-func Close(){
+func Close() {
 	DB.Close()
 
 }

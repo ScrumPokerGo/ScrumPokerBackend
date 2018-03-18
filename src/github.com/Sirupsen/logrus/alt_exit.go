@@ -45,14 +45,14 @@ func runHandlers() {
 	}
 }
 
-// Exit runs all the Logrus atexit handlers and then terminates the program using os.Exit(code)
+// Exit runs all the Logrus atexit api and then terminates the program using os.Exit(code)
 func Exit(code int) {
 	runHandlers()
 	os.Exit(code)
 }
 
 // RegisterExitHandler adds a Logrus Exit handler, call logrus.Exit to invoke
-// all handlers. The handlers will also be invoked when any Fatal log entry is
+// all api. The api will also be invoked when any Fatal log entry is
 // made.
 //
 // This method is useful when a caller wishes to use logrus to log a fatal

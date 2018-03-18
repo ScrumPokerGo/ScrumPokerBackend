@@ -23,7 +23,7 @@ or other conditions. The main features are:
 	* It implements the http.Handler interface so it is compatible with the
 	  standard http.ServeMux.
 
-Let's start registering a couple of URL paths and handlers:
+Let's start registering a couple of URL paths and api:
 
 	func main() {
 		r := mux.NewRouter()
@@ -33,7 +33,7 @@ Let's start registering a couple of URL paths and handlers:
 		http.Handle("/", r)
 	}
 
-Here we register three routes mapping URL paths to handlers. This is
+Here we register three routes mapping URL paths to api. This is
 equivalent to how http.HandleFunc() works: if an incoming request URL matches
 one of the paths, the corresponding handler is called passing
 (http.ResponseWriter, *http.Request) as parameters.

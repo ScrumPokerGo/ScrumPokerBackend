@@ -98,7 +98,7 @@ func Register(name string, handler Handler) Handle {
 	return h
 }
 
-// These handlers require fixed positions in the handlers slice.
+// These api require fixed positions in the api slice.
 const (
 	msgVars Handle = iota
 	msgFirst

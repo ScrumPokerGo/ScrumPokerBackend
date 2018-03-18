@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"net/http"
 	"log"
+	"net/http"
 )
 
 type Error interface {
@@ -26,7 +26,7 @@ func (se StatusError) Status() int {
 	return se.Code
 }
 
-func MiddlewareError(h func(w http.ResponseWriter, r *http.Request) error) http.HandlerFunc{
+func MiddlewareError(h func(w http.ResponseWriter, r *http.Request) error) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := h(w, r)
 		if err != nil {
@@ -45,4 +45,3 @@ func MiddlewareError(h func(w http.ResponseWriter, r *http.Request) error) http.
 		}
 	}
 }
-

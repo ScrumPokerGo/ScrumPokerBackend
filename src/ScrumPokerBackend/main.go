@@ -1,29 +1,38 @@
 package main
 
 import (
-	"net/http"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"github.com/gorilla/mux"
 	"ScrumPokerBackend/database"
+	"ScrumPokerBackend/model"
 	"ScrumPokerBackend/routers"
+	"ScrumPokerBackend/configuration"
+	"github.com/gorilla/mux"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"log"
+	"net/http"
+	"fmt"
+
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Gorilla!\n"))
-}
-
-
 func main() {
-
+	configuration.Init()
 	database.Init()
+
 	defer database.Close()
 	// Migrate the schema
-	//database.DB.AutoMigrate(&model.Account{})
-	//database.DB.AutoMigrate(&model.User{})
+	database.DB.AutoMigrate(&model.Account{})
+	database.DB.AutoMigrate(&model.User{})
+	database.DB.AutoMigrate(&model.Project{})
+	database.DB.AutoMigrate(&model.Milestone{})
+	database.DB.AutoMigrate(&model.Issue{})
 
-	//account := model.GetAccount(1)
-	//fmt.Println(account.Name)
+	//account := model.NewAccount("test")
+	//account.Save()
+	account,error := model.GetAccount(1)
+	fmt.Println(account.Name)
+	if error!=nil{
+		fmt.Println(account)
+	}
+	account.GitlabImport(55)
 
 	//user := model.GetUser(1)
 	//fmt.Println(user.Name)
@@ -32,11 +41,7 @@ func main() {
 	routers.AddAccountRouters(router)
 	routers.AddUserRouters(router)
 
-
-
-
 	// Satisfies the http.Handler interface
-
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
