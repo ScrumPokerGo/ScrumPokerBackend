@@ -30,7 +30,7 @@ func main() {
 	account,error := model.GetAccount(1)
 	fmt.Println(account.Name)
 	if error!=nil{
-		fmt.Println(account)
+		fmt.Println(account) 
 	}
 	account.GitlabImport(55)
 
@@ -40,8 +40,7 @@ func main() {
 	router := mux.NewRouter()
 	routers.AddAccountRouters(router)
 	routers.AddUserRouters(router)
-
+	routers.AddProjectRouters(router)
 	// Satisfies the http.Handler interface
-
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
