@@ -4,6 +4,7 @@ import (
 	"time"
 	"ScrumPokerBackend/database"
 	"ScrumPokerBackend/error"
+
 )
 
 type Project struct {
@@ -17,9 +18,19 @@ type Project struct {
 	AccountRefer int
 }
 
-func NewProject(name string) *Project {
+
+func (p *Project) Create() error{
+	db := database.DB.Save(&p)
+	if db.Error != nil {
+		return db.Error
+	}
+	return nil
+}
+
+func NewProject(name string,gitlab_id int) *Project {
 	project := Project{}
 	project.Name = name
+	project.GitlabID = gitlab_id
 	return &project
 }
 
@@ -36,9 +47,18 @@ func GetProjectsAll() ([]Project, error) {
 	project_list := []Project{}
 	db := database.DB.Find(&project_list)
 	if db.RowsAffected == 0 {
-		return nil, errors.New("Project not found", 404)
+		return project_list, nil
 	}
 	return project_list, nil
+}
+
+func GetMilestoneByGitlabProjectId(id int) (*Milestone,error){
+	m := Milestone{}
+	db := database.DB.First(&m, "GitlabID = ?",id)
+	if db.RowsAffected == 0 {
+		return nil, errors.New("Milestone not found", 404)
+	}
+	return &m, nil
 }
 
 func GetProjectByGitlabId(id int) (*Project, error) {
@@ -52,7 +72,13 @@ func GetProjectByGitlabId(id int) (*Project, error) {
 }
 
 
-func (m *Project)GitlabLoadMilestone(name string){
+func (p *Project)NewMilestone(title string, gitlab_id int) (*Milestone){
+	milestone := Milestone{GitlabID:gitlab_id,Name:title,Project:*p}
+	milestone.Create()
+	return &milestone
+}
 
+func (p *Project)GetMilestonesByProjectId() (*Milestone){
 
+	return nil
 }

@@ -1,4 +1,3 @@
-
 package api
 
 import (
@@ -11,19 +10,66 @@ import (
 	"github.com/xanzy/go-gitlab"
 	"fmt"
 	"ScrumPokerBackend/configuration"
+
 )
 
 func GetProjects(w http.ResponseWriter, r *http.Request) error {
+	project, err := model.GetProjectsAll()
+	if err != nil {
+		return middleware.StatusError{500, err}
+	}
+
+	err = json.NewEncoder(w).Encode(project)
+	if err != nil {
+		return middleware.StatusError{500, err}
+	}
 	return nil
 }
 
 func GitlabSyncProject(w http.ResponseWriter, r *http.Request) error {
-
-	git := gitlab.NewClient(nil, configuration.Configuration.GITLAB_TOKEN)
-	git.SetBaseURL(configuration.Configuration.GITLAB_ENDPOINT)
+	git := gitlab.NewClient(nil, configuration.Config.GITLAB_TOKEN)
+	git.SetBaseURL(configuration.Config.GITLAB_ENDPOINT)
 	project_service := git.Projects
-	//list_options := gitlab.ListProjectsOptions{}
-	project_list, _, err := project_service.ListProjects(nil,nil)
+	milestone := git.Milestones
+	issues := git.Issues
+	list_options := gitlab.ListProjectsOptions{ListOptions:gitlab.ListOptions{Page:1,PerPage:100}}
+	project_list, _, err := project_service.ListProjects(&list_options,nil)
+
+	for _, element := range project_list {
+		element_id := element.ID
+		_,err := model.GetProjectByGitlabId(element_id)
+
+		if (err != nil){
+			project_val := model.NewProject(element.Name,element.ID)
+			project_val.Create()
+			list_options_milestone := gitlab.ListMilestonesOptions{ListOptions:gitlab.ListOptions{Page:1,PerPage:100}}
+			milestones_list,_,err_milestone := milestone.ListMilestones(project_val.GitlabID,&list_options_milestone)
+			if err_milestone == nil{
+				for _,milestone_element := range milestones_list{
+					if (milestone_element.State != "closed"){
+						milestone_val := project_val.NewMilestone(milestone_element.Title,milestone_element.ID)
+						list_issues_options := gitlab.ListProjectIssuesOptions{Milestone:&milestone_val.Name,ListOptions:gitlab.ListOptions{Page:1,PerPage:100}}
+						list_issues_values,_,err_issues := issues.ListProjectIssues(project_val.GitlabID,&list_issues_options)
+						fmt.Println(milestone_element.State)
+						if(err_issues == nil){
+							for _,issue_val := range list_issues_values{
+								issue_element := milestone_val.NewIssue(issue_val.Title,issue_val.ID)
+								issue_element.Create()
+							}
+							fmt.Println(len(list_issues_values))
+						}else{
+							fmt.Println(err_issues)
+						}
+					}
+
+
+				}
+			}
+
+		}
+
+
+	}
 	if (err==nil){
 		fmt.Println(project_list)
 	}else{
