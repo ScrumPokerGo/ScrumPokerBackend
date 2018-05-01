@@ -25,7 +25,9 @@ func GetProjects(w http.ResponseWriter, r *http.Request) error {
 	}
 	return nil
 }
-
+//this Function needs to be improved by:
+//page limitation
+//loop efficiency (Update if exists)
 func GitlabSyncProject(w http.ResponseWriter, r *http.Request) error {
 	git := gitlab.NewClient(nil, configuration.Config.GITLAB_TOKEN)
 	git.SetBaseURL(configuration.Config.GITLAB_ENDPOINT)
@@ -50,13 +52,11 @@ func GitlabSyncProject(w http.ResponseWriter, r *http.Request) error {
 						milestone_val := project_val.NewMilestone(milestone_element.Title,milestone_element.ID)
 						list_issues_options := gitlab.ListProjectIssuesOptions{Milestone:&milestone_val.Name,ListOptions:gitlab.ListOptions{Page:1,PerPage:100}}
 						list_issues_values,_,err_issues := issues.ListProjectIssues(project_val.GitlabID,&list_issues_options)
-						fmt.Println(milestone_element.State)
 						if(err_issues == nil){
 							for _,issue_val := range list_issues_values{
 								issue_element := milestone_val.NewIssue(issue_val.Title,issue_val.ID)
 								issue_element.Create()
 							}
-							fmt.Println(len(list_issues_values))
 						}else{
 							fmt.Println(err_issues)
 						}
@@ -82,7 +82,7 @@ func GitlabSyncProject(w http.ResponseWriter, r *http.Request) error {
 func GetProject(w http.ResponseWriter, r *http.Request) error {
 	params := mux.Vars(r)
 	var err error = nil
-	project_id, err := strconv.ParseUint(params["id"], 10, 8)
+	project_id, err := strconv.Atoi(params["id"])
 	if err != nil {
 		return middleware.StatusError{500, err}
 	}

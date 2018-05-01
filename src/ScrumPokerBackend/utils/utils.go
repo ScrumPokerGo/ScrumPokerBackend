@@ -4,8 +4,15 @@ import (
 	"net/http"
 	"log"
 	"os"
-
+	"encoding/json"
+	"bytes"
 )
+
+func PrettyPrintJSON(b []byte) ([]byte, error) {
+	var out bytes.Buffer
+	err := json.Indent(&out, b, "", "    ")
+	return out.Bytes(), err
+}
 
 type Error struct {
 }

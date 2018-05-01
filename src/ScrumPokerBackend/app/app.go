@@ -22,6 +22,7 @@ func (a *App) Initialize() {
 	routers.AddAccountRouters(a.Router)
 	routers.AddUserRouters(a.Router)
 	routers.AddProjectRouters(a.Router)
+	routers.AddMilestonesRouters(a.Router)
 }
 
 func (a *App) Migrate(){

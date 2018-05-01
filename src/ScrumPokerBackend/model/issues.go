@@ -11,6 +11,7 @@ type Issue struct {
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
 	GitlabID	   int	     `json:"gitlab_id"`
+	TimeEstimated  int		 `json:"time_estimated"`
 	Milestone      Milestone `gorm:"foreignkey:MilestoneRefer" json:"milestone"`
 	MilestoneRefer int
 }
