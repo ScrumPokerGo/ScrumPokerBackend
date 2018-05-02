@@ -24,4 +24,31 @@ func (i *Issue) Create() error{
 	return nil
 }
 
+func GetIssuesAll() ([]Issue, error) {
+	issue_list := []Issue{}
+	db := database.DB.Find(&issue_list)
+	if db.RowsAffected == 0 {
+		return issue_list, nil
+	}
+	return issue_list, nil
+}
 
+
+func GetIssuesAllByProjectMilestone(project_id int,milestone_id int) ([]Issue, error) {
+	issue_list := []Issue{}
+	db := database.DB.Joins("left join milestones on milestones.id=milestone_refer and milestones.project_refer = ?",project_id).Find(&issue_list,"milestone_refer = ?", milestone_id)
+	if db.RowsAffected == 0 {
+		return issue_list, nil
+	}
+	return issue_list, nil
+}
+
+
+func GetIssuesAllByProjectMilestoneId(project_id int,milestone_id int,id int) ([]Issue, error) {
+	issue_list := []Issue{}
+	db := database.DB.Joins("left join milestones on milestones.id=milestone_refer and milestones.project_refer = ?",project_id).Find(&issue_list,"milestone_refer = ? AND issues.id = ?", milestone_id,id)
+	if db.RowsAffected == 0 {
+		return issue_list, nil
+	}
+	return issue_list, nil
+}
